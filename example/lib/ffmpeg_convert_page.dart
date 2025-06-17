@@ -33,7 +33,8 @@ class _FfmpegConvertPageState extends State<FfmpegConvertPage> {
     });
 
     // 1. 复制 assets mp3 到临时目录
-    File inputFile = await _copyAssetToFile('assets/EternalFlame_TheBangles.mp3', 'test.mp3');
+    File inputFile = await _copyAssetToFile(
+        'assets/EternalFlame_TheBangles.mp3', 'test.mp3');
     String inputPath = inputFile.path;
 
     // 2. 输出路径

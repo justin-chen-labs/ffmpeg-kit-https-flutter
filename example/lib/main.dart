@@ -56,7 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
         setState(() {
           if (ReturnCode.isSuccess(returnCode)) {
-            _output = 'FFmpeg is working!\n\nVersion info:\n${output ?? 'No output'}';
+            _output =
+                'FFmpeg is working!\n\nVersion info:\n${output ?? 'No output'}';
           } else {
             _output = 'FFmpeg test failed with return code: $returnCode';
           }
@@ -100,19 +101,27 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             ElevatedButton(
               onPressed: _isLoading ? null : _testFFmpeg,
-              child: _isLoading ? const CircularProgressIndicator(color: Colors.white) : const Text('Test FFmpeg'),
+              child: _isLoading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Text('Test FFmpeg'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const FfmpegConvertPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const FfmpegConvertPage()));
               },
               child: const Text('Test convert audio'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const FfmpegHttpsPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const FfmpegHttpsPage()));
               },
               child: const Text('Test FFmpeg HTTPS'),
             ),

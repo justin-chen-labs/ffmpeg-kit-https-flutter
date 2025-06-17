@@ -37,10 +37,12 @@ class FFmpegSession extends AbstractSession {
       LogCallback? logCallback = null,
       StatisticsCallback? statisticsCallback = null,
       LogRedirectionStrategy? logRedirectionStrategy = null]) async {
-    final session = await AbstractSession.createFFmpegSession(argumentsArray, logRedirectionStrategy);
+    final session = await AbstractSession.createFFmpegSession(
+        argumentsArray, logRedirectionStrategy);
     final sessionId = session.getSessionId();
 
-    FFmpegKitFactory.setFFmpegSessionCompleteCallback(sessionId, completeCallback);
+    FFmpegKitFactory.setFFmpegSessionCompleteCallback(
+        sessionId, completeCallback);
     FFmpegKitFactory.setLogCallback(sessionId, logCallback);
     FFmpegKitFactory.setStatisticsCallback(sessionId, statisticsCallback);
 
@@ -48,7 +50,8 @@ class FFmpegSession extends AbstractSession {
   }
 
   /// Returns the session specific statistics callback.
-  StatisticsCallback? getStatisticsCallback() => FFmpegKitFactory.getStatisticsCallback(this.getSessionId());
+  StatisticsCallback? getStatisticsCallback() =>
+      FFmpegKitFactory.getStatisticsCallback(this.getSessionId());
 
   /// Returns the session specific complete callback.
   FFmpegSessionCompleteCallback? getCompleteCallback() =>
@@ -68,7 +71,8 @@ class FFmpegSession extends AbstractSession {
         } else {
           return allStatistics
               .map((dynamic statisticsObject) =>
-                  FFmpegKitFactory.mapToStatistics(statisticsObject as Map<dynamic, dynamic>))
+                  FFmpegKitFactory.mapToStatistics(
+                      statisticsObject as Map<dynamic, dynamic>))
               .toList();
         }
       });
@@ -84,13 +88,16 @@ class FFmpegSession extends AbstractSession {
   Future<List<Statistics>> getStatistics() async {
     try {
       await FFmpegKitConfig.init();
-      return FFmpegKitPlatform.instance.ffmpegSessionGetStatistics(this.getSessionId()).then((statistics) {
+      return FFmpegKitPlatform.instance
+          .ffmpegSessionGetStatistics(this.getSessionId())
+          .then((statistics) {
         if (statistics == null) {
           return List.empty();
         } else {
           return statistics
               .map((dynamic statisticsObject) =>
-                  FFmpegKitFactory.mapToStatistics(statisticsObject as Map<dynamic, dynamic>))
+                  FFmpegKitFactory.mapToStatistics(
+                      statisticsObject as Map<dynamic, dynamic>))
               .toList();
         }
       });
@@ -101,7 +108,8 @@ class FFmpegSession extends AbstractSession {
   }
 
   /// Returns the last received statistics entry.
-  Future<Statistics?> getLastReceivedStatistics() async => this.getStatistics().then((statistics) {
+  Future<Statistics?> getLastReceivedStatistics() async =>
+      this.getStatistics().then((statistics) {
         if (statistics.isNotEmpty) {
           return statistics[statistics.length - 1];
         } else {

@@ -1,3 +1,7 @@
+## 0.0.6
+- fix dart analyze warns
+- fix Update the download address of FFmegkit-https Frameworks
+
 ## 0.0.5
 - fix dart analyze warns
 

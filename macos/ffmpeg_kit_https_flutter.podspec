@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'ffmpeg_kit_https_flutter'
-  s.version          = '0.0.4'
+  s.version          = '0.0.1'
   s.summary          = 'FFmpeg Kit for Flutter'
   s.description      = 'A Flutter plugin for running FFmpeg and FFprobe commands.'
   s.homepage         = 'https://github.com/chenjun1127/ffmepg_kit_https_frameworks'
