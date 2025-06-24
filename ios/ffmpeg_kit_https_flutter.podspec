@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   s.name             = 'ffmpeg_kit_https_flutter'
   s.version          = '0.0.1'
   s.summary          = 'FFmpeg Kit for Flutter'
-  s.description      = 'A Flutter plugin for running FFmpeg and FFprobe commands.'
+  s.description      = 'A Flutter plugin for running FFmpeg and FFprobe commands on iOS using prebuilt frameworks.'
   s.homepage         = 'https://github.com/chenjun1127/ffmepg_kit_https_frameworks'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'chenjun1127' => 'your-email@example.com' }
@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.requires_arc        = true
   s.static_framework    = true
 
-  # 修改为从GitHub Release下载
+  # 使用简单的 git 源，避免复杂的下载逻辑
   s.source              = {
     :git => 'https://github.com/chenjun1127/ffmepg_kit_https_frameworks.git',
     :tag => s.version.to_s
@@ -25,14 +25,17 @@ Pod::Spec.new do |s|
   # 设置最低部署版本
   s.ios.deployment_target = '12.0'
 
-  # 下载并解压远程frameworks
+  # 修复编码问题的 prepare_command
   s.prepare_command = <<-CMD
-    # 尝试多个下载源
-    if curl -L -o ios-frameworks.zip --connect-timeout 10 https://github.com/chenjun1127/ffmpeg_kit_https_flutter/releases/download/v#{s.version}/ios-frameworks.zip; then
-      echo "Downloaded from GitHub"
-    elif curl -L -o ios-frameworks.zip --connect-timeout 10 https://ghproxy.com/https://github.com/chenjun1127/ffmpeg_kit_https_flutter/releases/download/v#{s.version}/ios-frameworks.zip; then
-      echo "Downloaded from GitHub proxy"
-    else
+    #!/bin/bash
+    set -e
+    
+    # 设置环境变量解决编码问题
+    export LC_ALL=en_US.UTF-8
+    export LANG=en_US.UTF-8
+    
+    # 下载frameworks
+    if ! curl -L -o ios-frameworks.zip --connect-timeout 10 https://github.com/chenjun1127/ffmpeg_kit_https_flutter/releases/download/v#{s.version}/ios-frameworks.zip; then
       echo "Failed to download frameworks"
       exit 1
     fi
@@ -60,17 +63,8 @@ Pod::Spec.new do |s|
     echo "Frameworks extracted successfully"
   CMD
 
-  # 修正vendored_frameworks路径 - 与prepare_command创建的路径一致
-  s.vendored_frameworks = [
-    'Frameworks/bundle-apple-framework-ios/ffmpegkit.framework',
-    'Frameworks/bundle-apple-framework-ios/libavcodec.framework',
-    'Frameworks/bundle-apple-framework-ios/libavdevice.framework',
-    'Frameworks/bundle-apple-framework-ios/libavfilter.framework',
-    'Frameworks/bundle-apple-framework-ios/libavformat.framework',
-    'Frameworks/bundle-apple-framework-ios/libavutil.framework',
-    'Frameworks/bundle-apple-framework-ios/libswresample.framework',
-    'Frameworks/bundle-apple-framework-ios/libswscale.framework'
-  ]
+  # 使用通配符匹配所有framework文件
+  s.vendored_frameworks = 'Frameworks/**/*.framework'
 
   # iOS系统框架依赖
   s.frameworks = [
@@ -102,15 +96,16 @@ Pod::Spec.new do |s|
     'MetalKit'
   ]
 
-  # 编译器标志 - 只支持arm64真机架构
+  # 编译器标志 - 只排除模拟器的arm64
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
-    'VALID_ARCHS' => 'arm64',
-    'SUPPORTED_PLATFORMS' => 'iphoneos',
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64 x86_64 i386',
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
     'OTHER_LDFLAGS' => '-lc++',
     'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11',
     'CLANG_CXX_LIBRARY' => 'libc++',
     'ENABLE_BITCODE' => 'NO'
   }
+
+  # Swift 版本
+  s.swift_version = '5.0'
 end
