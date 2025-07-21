@@ -1,4 +1,8 @@
 
+## 1.1.0
+- Removed Flutter plugin V1 embedding registration. Fully upgraded to V2 embedding.
+- The plugin no longer supports V1 embedding auto-registration for Flutter 2.x/3.x. Now compatible only with Flutter 3.32.x and above.
+
 ## 1.0.2
 - Update README.md
 
